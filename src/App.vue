@@ -1,19 +1,43 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <c-flex
+      direction="column"
+      minHeight="100vh"
+      maxWidth="16rem"
+      p="1rem"
+      backgroundColor="grey.500"
+      margin="0"
+      position="relative"
+    >
+      <c-text
+        right="1rem"
+        position="absolute"
+        fontSize="lg"
+        fontWeight="bold"
+        color="primary.500"
+      >
+        ◀️</c-text
+      >
+      <c-text fontSize="lg" fontWeight="bold" color="primary.500">
+        Vue Test App</c-text
+      >
+
+      <a>
+        <c-text mt="2rem">📕 Phrases</c-text>
+      </a>
+    </c-flex>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import { CFlex, CText } from '@chakra-ui/vue';
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    CFlex,
+    CText,
+  },
+};
 </script>
 
 <style>
@@ -23,6 +47,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
