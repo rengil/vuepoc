@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <c-flex flex="1" width="100%">
     <transition name="scale">
       <a v-if="!isOpen" @click="open()">
         <c-text
+          v-bind:left="{ left: isCreating ? '4rem' : '1rem' }"
           cursor="pointer"
           as="a"
           top="1rem"
-          left="1rem"
           position="absolute"
           fontSize="lg"
           fontWeight="bold"
@@ -22,7 +22,7 @@
         v-if="isOpen"
         direction="column"
         minHeight="100vh"
-        maxWidth="16rem"
+        minWidth="16rem"
         p="1rem"
         backgroundColor="grey.500"
         margin="0"
@@ -49,21 +49,91 @@
         </a>
       </c-flex>
     </transition>
-  </div>
+    <c-flex v-if="isCreating" p="1rem" flex="1" flexDirection="column">
+      <c-text fontSize="32px" fontWeight="bold">Create new phrase</c-text>
+      <c-flex
+        flex="{1}"
+        flexDirection="column"
+        justify="center"
+        flexGrow="1"
+        mx="2rem"
+      >
+        <c-stack spacing="3">
+          <c-input placeholder="Phrase" size="md" v-model="phrase" />
+          <c-input placeholder="Owner" size="md" v-model="owner" />
+          <c-button
+            alignSelf="flex-end"
+            maxWidth="56px"
+            mt="2rem"
+            backgroundColor="primary.500"
+            color="white"
+            @click="add(phrase, owner)"
+            >Save</c-button
+          >
+        </c-stack>
+      </c-flex>
+    </c-flex>
+
+    <c-flex v-if="!isCreating" p="1rem" flex="1" flexDirection="column">
+      <c-text fontSize="32px" fontWeight="bold">Phrases</c-text>
+      <c-flex
+        v-if="items.length"
+        flex="{1}"
+        flexDirection="column"
+        justify="center"
+        alignItems="center"
+        textAlign="center"
+        flexGrow="1"
+      >
+      </c-flex>
+
+      <c-flex
+        v-if="!items.length"
+        flex="{1}"
+        flexDirection="column"
+        justify="center"
+        alignItems="center"
+        textAlign="center"
+        flexGrow="1"
+      >
+        <c-flex maxWidth="500px" flexDirection="column">
+          <c-text fontSize="32px" fontWeight="bold" color="primary.500"
+            >So Empty</c-text
+          >
+          <c-text fontSize="16px" fontWeight="bold" color="gray.500">
+            Nothing found. Add your first phrase to remember!</c-text
+          >
+          <c-button
+            mt="2rem"
+            backgroundColor="primary.500"
+            color="white"
+            @click="isCreating = true"
+            >Create first</c-button
+          >
+        </c-flex>
+      </c-flex>
+    </c-flex>
+  </c-flex>
 </template>
 
 <script>
-import { CFlex, CText } from '@chakra-ui/vue';
+import { CFlex, CText, CButton, CInput, CStack } from '@chakra-ui/vue';
 import { topbarService } from './app/topbar.ts';
+
 export default {
   name: 'App',
   components: {
     CFlex,
     CText,
+    CButton,
+    CInput,
+    CStack,
   },
   data() {
     return {
       isOpen: true,
+      isCreating: false,
+      items: [],
     };
   },
   created() {
@@ -80,6 +150,11 @@ export default {
     },
     open: () => {
       topbarService.open();
+    },
+    add: function(title, owner) {
+      console.log(this);
+      this.items = [...this.items, { owner, title }];
+      this.isCreating = false;
     },
   },
 };
